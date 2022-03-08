@@ -19,7 +19,7 @@ import org.json.*;
  *
  * @author lauria_luca
  */
-public class Libreria {
+public class LibreriaTelegram {
 
     private static BufferedReader in;
     public String allJSON = "";
