@@ -13,7 +13,6 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import org.json.*;
 
 /**
  *
@@ -23,10 +22,10 @@ public class LibreriaTelegram {
 
     private static BufferedReader in;
     public String allJSON = "";
-    String BotName = "Pubblicita5blauria";
-    String BotKey = "5208330863:AAEd3NvwpRRCuiBNaTWcCeq98Nv_Rjm3h0E";
+    String BotName = "Pubblicita5b_lauria";
+    String BotKey = "5234909321:AAFknBZKrPgTEs4UgtNwh4pcXZrUstAN4ps";
 
-    public void Libreria() {
+    public void LibreriaTelegram() {
     }
 
     public String getBotName() {
@@ -37,29 +36,20 @@ public class LibreriaTelegram {
         return BotKey;
     }
 
-    public void getUpdates() {
+    public String getUpdates() {
         try {
             URL url = new URL("https://api.telegram.org/bot" + BotKey + "/getUpdates");
-            System.out.println(url);
+            //System.out.println(url);
             in = new BufferedReader(new InputStreamReader(url.openStream()));
             String line;
             while ((line = in.readLine()) != null) {
-                allJSON += line;
+                allJSON += line+"\n";
             }
             in.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public void Scomponi() {
-        System.out.println(allJSON);
-        JSONObject json = new JSONObject(allJSON);//riscontrati alcuni problemi con la libreria
-        JSONArray jArray = json.getJSONArray("result");
-        
-        for (int i = 0; i < jArray.length(); i++) {
-           System.out.println(jArray.getJSONObject(i).getJSONObject("message").get("text").toString());
-        }
+        return allJSON;
     }
 
     public void sendMessage(String message, int id) throws MalformedURLException, IOException {

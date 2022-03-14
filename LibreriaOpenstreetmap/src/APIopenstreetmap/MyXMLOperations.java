@@ -5,21 +5,19 @@
  */
 package APIopenstreetmap;
 
-import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.StringReader;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Scanner;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Source;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
-import javax.xml.validation.Validator;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
@@ -27,89 +25,30 @@ import org.xml.sax.SAXException;
  * @author lauria_luca
  */
 public class MyXMLOperations {
-     private Document document;
-
-    public Document getDocument() {
-        return document;
-    }
     
-    public void validate(String XMLdocument, String XSDschema) throws SAXException, IOException {
-        // creazione di uno schema XSD a partire dal file
-        SchemaFactory factory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
-        File schemaFile = new File(XSDschema);
-        Schema schema = factory.newSchema(schemaFile);
-        // creazione di un validatore rispetto allo schema XSD
-        Validator validator = schema.newValidator();
-        // validazione del documento XML
-        Source source = new StreamSource(XMLdocument);
-        validator.validate(source);
+    private String baseURL;
+    private String addonURL;
+
+    public MyXMLOperations() {
+        this.baseURL = "https://nominatim.openstreetmap.org/search?q=";
+        this.addonURL = "&format=xml&addressdetails=1Compito";
     }
 
-    public List parseDocument(String filename)
-            throws ParserConfigurationException, SAXException, IOException {
-        
-        DocumentBuilderFactory factory;
-        DocumentBuilder builder;
-        Element root, element;
-        NodeList nodelist;
-        // creazione dell’albero DOM dal documento XML
-        factory = DocumentBuilderFactory.newInstance();
-        builder = factory.newDocumentBuilder();
-        
-        document = builder.parse(filename);
-        root = document.getDocumentElement();
-        List<Location> dati = new ArrayList();
-        Location dato;
-        nodelist = root.getElementsByTagName("place");//numero di place
-        if (nodelist != null && nodelist.getLength() > 0) {
-            int numNode = nodelist.getLength();
-            for (int i = 0; i < numNode; i++) {
-                element = (Element) nodelist.item(i);
-                dato = getInfo(element);
-                dati.add(dato);
-            }
-        }
-        return dati;
-    }
-    
-    
-    private Location getInfo(Element element) {
-        
-        Location posizione = new Location();
-        NodeList children = element.getChildNodes();
-        
-        for(int i =0;i<children.getLength();i++){
-            if(children.item(i).getNodeName()!="#text"){
-                posizione.addNome(children.item(i).getNodeName());
-                posizione.addValore(children.item(i).getTextContent());
-            }       
-        }
-        return posizione;
-    }
-    
-    // restituisce il valore testuale dell’elemento figlio specificato
-    private String getTextValue(Element element, String tag) {
-        String value = null;
-        NodeList nodelist;
-        nodelist = element.getElementsByTagName(tag);
-        if (nodelist != null && nodelist.getLength() > 0) {
-            value = nodelist.item(0).getFirstChild().getNodeValue();
-        }
-        return value;
+    public String getXML(String search) throws FileNotFoundException, IOException {
+        URL url = new URL(baseURL + URLEncoder.encode(search, StandardCharsets.UTF_8) + addonURL);
+        Scanner scanner = new Scanner(url.openStream());
+        scanner.useDelimiter("\u001a");
+        String file = scanner.next();
+        System.out.println(url);
+        return file;
     }
 
-    // restituisce il valore intero dell’elemento figlio specificato
-    private int getIntValue(Element element, String tag) {
-        return Integer.parseInt(getTextValue(element, tag));
-    }
-
-    // restituisce il valore numerico dell’elemento figlio specificato
-    private float getFloatValue(Element element, String tag) {
-        return Float.parseFloat(getTextValue(element, tag));
-    }
-
-     // restituisce il valore numerico dell’elemento figlio specificato
-    private double getDoubleValue(Element element, String tag) {
-        return Double.parseDouble(getTextValue(element, tag));
+    public SearchResults searchPlace(String place) throws ParserConfigurationException, SAXException, IOException {//prendo il primo place
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        String xml = getXML(place);
+        Document doc = builder.parse(new InputSource(new StringReader(xml)));
+        SearchResults sr = new SearchResults((Element) doc.getElementsByTagName("searchresults").item(0));
+        return sr;
     }
 }
