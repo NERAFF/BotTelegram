@@ -22,8 +22,9 @@ public class LibreriaTelegram {
 
     private static BufferedReader in;
     public String allJSON = "";
-    String BotName = "Pubblicita5b_lauria";
-    String BotKey = "5234909321:AAFknBZKrPgTEs4UgtNwh4pcXZrUstAN4ps";
+    String BotName = "pubblicita5Blauria";
+    String BotKey = "";
+    int offset=0;
 
     public void LibreriaTelegram() {
     }
@@ -38,8 +39,8 @@ public class LibreriaTelegram {
 
     public String getUpdates() {
         try {
-            URL url = new URL("https://api.telegram.org/bot" + BotKey + "/getUpdates");
-            //System.out.println(url);
+            URL url = new URL("https://api.telegram.org/bot" + BotKey + "/getUpdates?offset=");
+            System.out.println(url);
             in = new BufferedReader(new InputStreamReader(url.openStream()));
             String line;
             while ((line = in.readLine()) != null) {
@@ -56,6 +57,11 @@ public class LibreriaTelegram {
         URL url = new URL("https://api.telegram.org/bot" + getBotKey() + "/sendMessage?chat_id=" + id + "&text=" + message);
         URLConnection con = url.openConnection();
         InputStream invia = new BufferedInputStream(con.getInputStream());
-
+    }
+    public void setOffset(int  offset) throws MalformedURLException, IOException
+    {
+        URL url = new URL("https://api.telegram.org/bot" + getBotKey() + "/getUpdates?offset=" + offset);
+        URLConnection con = url.openConnection();
+        InputStream invia = new BufferedInputStream(con.getInputStream());      
     }
 }

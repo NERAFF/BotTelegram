@@ -9,19 +9,36 @@ package Liberiatelegram;
  * @author lauria_luca
  */
 public class UserTelegram {
+    int update_id;
     int message_id;
     int chatId;
     String first_name;
     String username;
     String text;
+    Boolean registrato;
     public UserTelegram()
     {
+        update_id=0;
         message_id=0;
         chatId=0;
         first_name="";
         username="";
         text="";
+        registrato=false;
     }
+
+    public Boolean getRegistrato() {
+        return registrato;
+    }
+
+    public void setRegistrato(Boolean registrato) {
+        this.registrato = registrato;
+    }
+
+    public int getUpdate_id() {
+        return update_id;
+    }
+    
     public int getMessage_id() {
         return message_id;
     }
@@ -40,6 +57,10 @@ public class UserTelegram {
 
     public String getUsername() {
         return username;
+    }
+
+    public void setUpdate_id(int update_id) {
+        this.update_id = update_id;
     }
 
     public void setMessage_id(int message_id) {
