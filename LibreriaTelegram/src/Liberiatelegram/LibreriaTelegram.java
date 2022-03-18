@@ -23,7 +23,7 @@ public class LibreriaTelegram {
     private static BufferedReader in;
     public String allJSON = "";
     String BotName = "pubblicita5Blauria";
-    String BotKey = "";
+    String BotKey = "5272591830:AAGfgtfnqVKQhanYGqrYMoQxAem46WzuBEQ";
     int offset=0;
 
     public void LibreriaTelegram() {
