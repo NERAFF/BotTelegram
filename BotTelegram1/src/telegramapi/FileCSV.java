@@ -56,11 +56,12 @@ public class FileCSV {
         bw.newLine();
         bw.close();
     }
-    public synchronized void Rewrite(List<String> s) throws IOException {//riscrivi il file quando stesso utente fa di nuovo /citta
+    public synchronized void Rewrite(List<String> lineList) throws IOException {//riscrivi il file quando stesso utente fa di nuovo /citta
+        this.lineList=lineList;
         BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-        for (int i = 0; i < s.size(); i++) {
-           System.out.println(s.get(i));
-           bw.write(s.get(i));
+        for (int i = 0; i < lineList.size(); i++) {
+           System.out.println(lineList.get(i));
+           bw.write(lineList.get(i));
            bw.newLine();
         }
         bw.close();
@@ -75,6 +76,7 @@ public class FileCSV {
     public List<String> read() throws FileNotFoundException, IOException {
         BufferedReader br = new BufferedReader(new FileReader(file));
         String line = "";
+        lineList.clear();
         while ((line = br.readLine()) != null) {
             lineList.add(line);
         }

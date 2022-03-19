@@ -21,10 +21,9 @@ import java.net.URLConnection;
 public class LibreriaTelegram {
 
     private static BufferedReader in;
-    public String allJSON = "";
     String BotName = "pubblicita5Blauria";
     String BotKey = "5272591830:AAGfgtfnqVKQhanYGqrYMoQxAem46WzuBEQ";
-    int offset=0;
+    int offset;
 
     public void LibreriaTelegram() {
     }
@@ -38,15 +37,17 @@ public class LibreriaTelegram {
     }
 
     public String getUpdates() {
+        
+        String allJSON="";
         try {
-            URL url = new URL("https://api.telegram.org/bot" + BotKey + "/getUpdates?offset=");
-            System.out.println(url);
+            URL url = new URL("https://api.telegram.org/bot" + BotKey + "/getUpdates?offset="+offset);
             in = new BufferedReader(new InputStreamReader(url.openStream()));
             String line;
             while ((line = in.readLine()) != null) {
                 allJSON += line+"\n";
             }
             in.close();
+            System.out.println("https://api.telegram.org/bot"+BotKey+"/getUpdates?offset="+offset);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -60,8 +61,10 @@ public class LibreriaTelegram {
     }
     public void setOffset(int  offset) throws MalformedURLException, IOException
     {
-        URL url = new URL("https://api.telegram.org/bot" + getBotKey() + "/getUpdates?offset=" + offset);
+        this.offset=offset;
+        URL url = new URL("https://api.telegram.org/bot" + BotKey + "/getUpdates?offset="+offset);
+        System.out.println("nuovo url:"+url);
         URLConnection con = url.openConnection();
-        InputStream invia = new BufferedInputStream(con.getInputStream());      
+        InputStream invia = new BufferedInputStream(con.getInputStream());
     }
 }

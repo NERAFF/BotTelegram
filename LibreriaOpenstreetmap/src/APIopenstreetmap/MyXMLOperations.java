@@ -39,7 +39,7 @@ public class MyXMLOperations {
         Scanner scanner = new Scanner(url.openStream());
         scanner.useDelimiter("\u001a");
         String file = scanner.next();
-        System.out.println(url);
+        //System.out.println(url);
         return file;
     }
 

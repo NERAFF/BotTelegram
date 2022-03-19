@@ -33,8 +33,7 @@ public class BotTelegram {
        FileCSV fileUsers = new FileCSV("user.csv");
         
 
-        ThreadRicezione threadTelegram;
-        threadTelegram = new ThreadRicezione(fileUsers);
+        ThreadRicezione threadTelegram = new ThreadRicezione(fileUsers);
         threadTelegram.start();
  
     }

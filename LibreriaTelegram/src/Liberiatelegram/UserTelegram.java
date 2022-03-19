@@ -85,10 +85,10 @@ public class UserTelegram {
     
    @Override
     public String toString() {
-        return "message_id: " + getMessage_id() + "  "
+        return "update_id: " + getUpdate_id()+ "  "
+                + "chatId: " + getMessage_id() + "  "
                 + "chatId: " + getChatId() + "  "
                 + "first_name: " + getFirst_name() + "  "
-                + "username: " + getUsername() + "  "
                 + "text: " + getText() + "\n";
     }
       
