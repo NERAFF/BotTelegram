@@ -52,7 +52,7 @@ public class FileCSV {
 
     public synchronized void write(String s) throws IOException {
         BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-        bw.write(s);
+        bw.write(s);//Crea file  || sovrascirve
         bw.newLine();
         bw.close();
     }

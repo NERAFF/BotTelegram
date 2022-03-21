@@ -36,7 +36,6 @@ public class ThreadRicezione extends Thread {
 
     public ThreadRicezione(FileCSV fileUsers) {
         this.n = new LibreriaTelegram();
-        this.utente=new UserTelegram();
         this.openstreet = new MyXMLOperations();
         this.fileUsers = fileUsers;
         this.campi = new String[MIN_PRIORITY];
@@ -57,7 +56,7 @@ public class ThreadRicezione extends Thread {
             
             
             for (int i = 0; i < jArray.length(); i++) {
-                utente = new UserTelegram();
+                utente = new UserTelegram(jArray.getJSONObject(i));
 
                 //salvo i dati del primo elemento del vettore di messaggi
                 utente.setUpdate_id(Integer.parseInt(jArray.getJSONObject(i).get("update_id").toString()));
@@ -88,6 +87,11 @@ public class ThreadRicezione extends Thread {
                         } catch (IOException ex) {
                             Logger.getLogger(ThreadRicezione.class.getName()).log(Level.SEVERE, null, ex);
                         }
+                        try {
+                            n.sendMessage("sei la prima persona registrata", utente.getChatId());
+                        } catch (IOException ex) {
+                            Logger.getLogger(ThreadRicezione.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     } else {//altrimenti salvo in append
                         try {
                             linee = fileUsers.read();
@@ -106,12 +110,22 @@ public class ThreadRicezione extends Thread {
                                     Logger.getLogger(ThreadRicezione.class.getName()).log(Level.SEVERE, null, ex);
                                 }
                                 utente.setRegistrato(true);
+                                try {
+                                    n.sendMessage("modifiche effetuate", utente.getChatId());
+                                } catch (IOException ex) {
+                                    Logger.getLogger(ThreadRicezione.class.getName()).log(Level.SEVERE, null, ex);
+                                }
                             } else {//scorre linea
                             }
                         }
                         if (utente.getRegistrato() == false) {
                             //se l'utente non è registrato si registra
                             System.out.println("nuova registrazione");
+                            try {
+                                n.sendMessage("registrazione completata", utente.getChatId());
+                            } catch (IOException ex) {
+                                Logger.getLogger(ThreadRicezione.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                             try {//salvo in append
                                 fileUsers.append(forcsv);
                             } catch (IOException ex) {
@@ -119,11 +133,7 @@ public class ThreadRicezione extends Thread {
                             }
                         }
                     }
-                    try {
-                        n.sendMessage(forcsv, utente.getChatId());//mess risposta /citta <nomecitta>
-                    } catch (IOException ex) {
-                        Logger.getLogger(ThreadRicezione.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    
                 } else {//Sintassi errata
                     try {
                         n.sendMessage("fare /citta 'nome citta'", utente.getChatId());

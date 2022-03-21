@@ -21,8 +21,8 @@ import java.net.URLConnection;
 public class LibreriaTelegram {
 
     private static BufferedReader in;
-    String BotName = "pubblicita5Blauria";
-    String BotKey = "5272591830:AAGfgtfnqVKQhanYGqrYMoQxAem46WzuBEQ";
+    String BotName = "PUBBLICITA_lauria5b";
+    String BotKey = "5188264080:AAHx17MHf5pSVzNxT3NdTg4ZsifqGJZEjk8";
     int offset;
 
     public void LibreriaTelegram() {

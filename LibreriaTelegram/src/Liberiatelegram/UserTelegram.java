@@ -4,6 +4,8 @@
  */
 package Liberiatelegram;
 
+import org.json.JSONObject;
+
 /**
  *
  * @author lauria_luca
@@ -16,15 +18,15 @@ public class UserTelegram {
     String username;
     String text;
     Boolean registrato;
-    public UserTelegram()
+    public UserTelegram(JSONObject obj)
     {
-        update_id=0;
-        message_id=0;
-        chatId=0;
-        first_name="";
-        username="";
-        text="";
-        registrato=false;
+        update_id= obj.has("update_id") ? obj.getInt("update_id") : null;
+        message_id= obj.getJSONObject("message").has("message_id") ? obj.getJSONObject("message").getInt("message_id") : null;
+        chatId= obj.getJSONObject("message").getJSONObject("chat").has("id") ? obj.getJSONObject("message").getJSONObject("chat").getInt("id") : null;
+        first_name=obj.getJSONObject("message").getJSONObject("chat").has("first_name") ? obj.getJSONObject("message").getJSONObject("chat").getString("first_name") : null;
+        username=obj.getJSONObject("message").getJSONObject("chat").has("username") ? obj.getJSONObject("message").getJSONObject("chat").getString("username") : null;
+        text=obj.getJSONObject("message").getJSONObject("chat").has("text") ? obj.getJSONObject("message").getJSONObject("chat").getString("text") : null;
+        registrato=false;     
     }
 
     public Boolean getRegistrato() {
